@@ -107,7 +107,7 @@ while True:
             x +=1
             while tokens_doc[x].type != 'PROCS':
                 if tokens_doc[x].type == 'ID' or tokens_doc[x].type == 'COMMA':
-                    if x == len(tokens_doc)-1:
+                    if x == len(tokens_doc)-1 and tokens_doc[x].type != 'PROCS':
                         print('Programa invalido!! - no declara procs')
                         break
                     else:
