@@ -21,7 +21,7 @@ tokens = tokens + list(reservadas.values())
 
 
 t_ignore = ' \t'
-t_LSPARENT = r'\['
+t_LSPARENT = r'\[r'
 t_RSPARENT = r'\]'
 t_COMMA = r','
 t_SEMICOLON = r';'
@@ -29,7 +29,7 @@ t_COLON = r':'
 t_VERTICALBAR = r'\|'
 
 def t_ID(t):
-    r'[a-zA-Z][a-zA-Z0-9]*'
+    r'[a-zA-Z_][a-zA-Z0-9_]*'
     #t.type = reservadas.get(t.value, 'ID')
     #t.value = t.value.upper()
     if t.value.upper() in reservadas.keys():
@@ -44,7 +44,6 @@ def t_NUMBER(t):
     return t
 
 def t_error(t):
-    print("Existen caracteres ilegales dentro del código ingresado '%s'" % t.value[0])
     t.lexer.skip(1)
 
 def buscarFicheros(directorio):
@@ -71,7 +70,7 @@ def buscarFicheros(directorio):
 
     return files[int(numArchivo) - 1]
 
-directorio = "C:/Users/santi/OneDrive/Documentos/Universidad/3er semestre/LyM/P0/test/"
+directorio = "C:/Users/garav/OneDrive/Escritorio/LYM/test/"
 
 
 archivo = buscarFicheros(directorio)
@@ -84,10 +83,45 @@ analizador = lex.lex()
 
 analizador.input(cadena)
 
+tokens_doc = []
+
 while True:
     tok = analizador.token()
     if not tok: break
-    print(tok)
+    tokens_doc.append(tok)
+    
+for i in tokens_doc:
+    print(i)
+    
+x = 0
+while True:
+    if tokens_doc[x].type != 'ROBOT_R':
+        print('Programa invalido!! - No inicia el robot')
+        break
+    else:
+        x+=1
+        if tokens_doc[x].type != 'VARS':
+            print('Programa invalido!! - no declara variables')
+            break
+        else:
+            x +=1
+            while tokens_doc[x].type != 'PROCS':
+                if tokens_doc[x].type == 'ID' or tokens_doc[x].type == 'COMMA':
+                    if x == len(tokens_doc)-1:
+                        print('Programa invalido!! - no declara procs')
+                        break
+                    else:
+                        x += 1
+                else:
+                    if tokens_doc[x].type != 'PROCS':
+                        print('Programa invalido!! - no declara procs')
+                        break
+                    else:
+                        print('vamos bien!!')
+                break
+                        
+                    
+        
 
 
 
